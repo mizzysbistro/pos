@@ -253,7 +253,7 @@ const REASONS={void:['Customer cancelled','Wrong item ordered','Kitchen error or
 /* STEP 1: paste your Supabase values here (Project Settings > API). The anon/publishable key is safe in a browser app.
    If you leave these empty the app asks for them on the Settings page and remembers them on that device only. */
 const SUPABASE_URL='';https://tjjvdsjrdjzqszzdtosk.supabase.co
-const SUPABASE_ANON_KEY='';sb_publishable_UbpNnGgqS0Q7TjD17alFCQ_H4oaxXWp
+const eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRnemlld21icnBmaHR2emlwZmlyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE0NjY2NjcsImV4cCI6MjEwNzA0MjY2N30.W7cvY88x9XcOHkBUTQgSGz7StCyAh4AbBCrBz7afBbc
 const CLOUD_CFG_KEY='mizzy4-cloud-config';
 let cloudClient=null,cloudUser=null,cloudBusy=false,cloudTimer=null,cloudInterval=null,cloudChannel=null,cloudApplying=false,cloudLastRemote=0,cloudLastPayload='',cloudBooting=false,cloudPulledFor=null,cloudStatus='',cloudStatusBad=false,cloudSaving=false,cloudDirty=false,cloudDevice=(window.crypto&&crypto.randomUUID?crypto.randomUUID():String(Date.now())+'-'+Math.random().toString(36).slice(2));
 function cloudCfg(){if(SUPABASE_URL&&SUPABASE_ANON_KEY)return{url:SUPABASE_URL,key:SUPABASE_ANON_KEY,fixed:true};try{return JSON.parse(localStorage.getItem(CLOUD_CFG_KEY)||'null')}catch(e){return null}}
