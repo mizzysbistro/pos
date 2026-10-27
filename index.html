@@ -858,7 +858,7 @@ function applyDefaultHotColdModifiers(items){
  return (Array.isArray(items)?items:[]).map(p=>{
   if(p.category!=='Coffee'&&!hotColdNames.has(p.name))return p;
   const options=Array.isArray(p.modifierOptions)&&p.modifierOptions.length?p.modifierOptions.map(o=>({...o})):(p.modifiers||[]).map(name=>({name,price:0}));
-  for(const name of ['Hot','Cold'])if(!options.some(o=>String(o.name||'').toLowerCase()===name.toLowerCase()))options.push({name,price:20});
+  for(const name of ['Hot','Cold']){const option=options.find(o=>String(o.name||'').toLowerCase()===name.toLowerCase());if(option)option.price=name==='Cold'?20:0;else options.push({name,price:name==='Cold'?20:0});}
   return {...p,modifierOptions:options};
  });
 }
