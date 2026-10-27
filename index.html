@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>My POS · Mizzy's Bistro</title>
+<title>MY POS · Mizzy's Bistro — Preview</title>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#f3f6f4;--card:#fff;--ink:#12302f;--mute:#5d7471;--line:#dbe4e1;--pri:#1f6f5c;--prit:#fff;--acc:#e8a317;--bad:#c8433a;--soft:#e4f0ec;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -137,9 +137,15 @@ tr.critr td{background:color-mix(in srgb,var(--bad) 12%,var(--card))}
 .calc-screen{min-height:122px;display:flex;flex-direction:column;justify-content:flex-end;align-items:flex-end;padding:8px 6px 14px;overflow:hidden;background:var(--bg);border-radius:14px;margin-bottom:12px}.calc-expression{font-size:20px;color:var(--mute);min-height:30px;white-space:nowrap}.calc-answer{font-size:52px;line-height:1.05;color:var(--ink);font-weight:700;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}.calcgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}.calcgrid button{height:64px;font-size:25px;font-weight:650;border-radius:11px;border:1px solid var(--line);background:var(--soft);color:var(--ink);transition:transform .08s,filter .12s,background .12s}.calcgrid button:active{transform:scale(.95);filter:brightness(1.08)}.calcgrid .op{background:var(--pri);color:var(--prit);border-color:var(--pri);font-size:28px}.calcgrid .func{background:var(--line);color:var(--ink)}.calcgrid .eq{background:var(--acc);color:#000;border-color:var(--acc);height:64px}.calcclose{width:100%;margin-top:12px;background:var(--bg);color:var(--ink);border-color:var(--line)}.pinw-stable{animation:none!important}.timer-controls{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--line);border-radius:9px;padding:2px 5px;background:var(--card)}.timer-controls button{padding:2px 9px;min-width:30px}.timer-controls b{min-width:48px;text-align:center;font-size:12px}
 @media(max-width:500px){.calcw{max-width:350px;padding:14px}.calcgrid{gap:8px}.calcgrid button{height:58px}.calc-answer{font-size:46px}}
 @media(prefers-reduced-motion:no-preference){.card{animation:cardIn .16s ease-out both}.bn button{transition:transform .1s,background .15s}.bn button:active{transform:translateY(2px)}@keyframes cardIn{from{opacity:.82;transform:translateY(4px)}to{opacity:1;transform:none}}}
+
+/* Deployment status banner: this build is for preview only. */
+.pos-preview-notice{margin:10px 12px 0;padding:11px 14px;border:1px solid #e9bf63;border-radius:10px;background:#fff7dd;color:#674b12;font-size:13px;line-height:1.45;font-weight:650}
+.pos-preview-notice strong{letter-spacing:.04em}
+@media(max-width:600px){.pos-preview-notice{margin:8px 8px 0;font-size:12px}}
 </style>
 </head>
 <body>
+<div class="pos-preview-notice" role="status"><strong>PREVIEW BUILD — TEST DATA ONLY.</strong> This version saves orders and inventory in this browser only. Google sign-in, shared cloud data, and real card/GCash processing are not connected. Do not use for live sales.</div>
 <header>
 <h1>My POS</h1><small class="br">Mizzy's Bistro</small><span id="topClock" class="br" aria-label="Date and time"></span>
 <div class="who"><span id="dl" class="tag" style="display:none;color:var(--ink)">🖥 Linked</span><span><i class="dot" id="net"></i> <span id="netl">Online</span></span><span id="me"></span><button onclick="theme()" aria-label="Toggle light or dark" style="padding:4px 8px;background:transparent;color:inherit;border-color:rgba(255,255,255,.45)">🌓</button><button onclick="signOut()" style="white-space:nowrap;padding:4px 10px;background:transparent;color:inherit;border-color:rgba(255,255,255,.45)">Lock</button></div>
