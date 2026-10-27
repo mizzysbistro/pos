@@ -384,7 +384,12 @@ async function inviteStaff(email, role) {
 }
 async function signInWithGoogle() {
   cloud.lastError = '';
-  const redirectTo = `${location.origin}${location.pathname}`;
+  // Always send production sign-ins back to the published GitHub Pages app.
+  // Keep localhost redirects only when intentionally developing locally.
+  const localHosts = ['localhost', '127.0.0.1', '::1'];
+  const redirectTo = localHosts.includes(location.hostname)
+    ? `${location.origin}${location.pathname}`
+    : 'https://mizzysbistro.github.io/pos/';
   const { error } = await supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo, queryParams: { prompt: 'select_account' } } });
   if (error) { cloud.lastError = error.message; updateStatus(); throw error; }
 }
