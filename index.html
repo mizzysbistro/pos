@@ -59,9 +59,11 @@
 .main{display:block;width:100%;max-width:none!important;min-width:0;margin:0;padding:clamp(12px,1.8vw,28px)!important}
 .topbar{gap:clamp(8px,1.3vw,18px);padding:0 clamp(10px,1.6vw,24px)}
 .brand{min-width:0;gap:9px}
-.brand-menu-trigger{flex:none;appearance:none;-webkit-appearance:none;border:0;background:transparent;color:inherit;padding:0;text-align:left;cursor:pointer;border-radius:12px;outline-offset:5px}
-.brand-menu-trigger:hover{opacity:.94}
-.brand-menu-trigger:active{transform:scale(.99)}
+.brand-copy{display:flex;flex-direction:column;justify-content:center;min-width:0;pointer-events:none}
+.brandmark-menu-trigger{appearance:none;-webkit-appearance:none;cursor:pointer;flex:0 0 41px;background:#ffffff0b;border-color:#ffffff80;color:#fff;box-shadow:0 2px 8px #003b2520;transition:background .16s ease,border-color .16s ease,transform .16s ease}
+.brandmark-menu-trigger:hover{background:#ffffff25;border-color:#ffffffdb}
+.brandmark-menu-trigger:active{background:#ffffff30;transform:scale(.96)}
+.brandmark-menu-trigger:focus-visible{outline:3px solid #b5f2d1;outline-offset:3px}
 .topline,.top-label,.cloud-status{display:none!important}
 .header-spacer{flex:1;min-width:8px}
 .navigation-backdrop{position:fixed;inset:0;background:rgba(3,26,16,.56);backdrop-filter:blur(2px);z-index:70;opacity:0;visibility:hidden;transition:opacity .2s,visibility .2s}
@@ -90,7 +92,32 @@
 .drawer-shift small{display:block;color:var(--muted);font-size:10px;margin-top:4px}
 .drawer-bottom .btn{width:100%}
 @media(max-width:950px){.sidebar,.mobile-bottom{display:none!important}.layout{display:block!important}.main{padding:clamp(12px,2.2vw,20px)!important}.topbar{height:62px;padding:0 12px;gap:10px}.brandmark{width:35px;height:35px;font-size:17px}.brand strong{font-size:18px}.brand small{font-size:9px}}
-@media(max-width:690px){.topbar{height:56px;padding:0 9px;gap:8px}.brandmark{display:none}.brand strong{font-size:17px}.brand small{font-size:8px}.brand-menu-trigger{gap:0}.main{padding:12px 9px 18px!important}.profile-pill{margin-left:auto}}
+@media(max-width:690px){.topbar{height:56px;padding:0 9px;gap:8px}.brandmark{display:none}.brandmark-menu-trigger{display:grid!important;width:35px;height:35px;flex:0 0 35px;padding:0;font-size:17px}.brand-copy strong{font-size:17px}.brand-copy small{font-size:8px}.brand{gap:8px}.main{padding:12px 9px 18px!important}.profile-pill{margin-left:auto}}
+
+/* Finishing layer: precise touch targets, clean text behavior, and restrained motion */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;scroll-behavior:smooth}
+body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;overscroll-behavior-y:contain}
+button,a,[role="button"]{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+button:disabled{cursor:not-allowed;opacity:.55}
+.topbar{height:68px;backdrop-filter:saturate(125%);box-shadow:0 3px 18px rgba(3,52,31,.16)}
+.brand{gap:10px}
+.brand-copy strong{font:800 19px/1.05 'Manrope',sans-serif;letter-spacing:-.45px}
+.brand-copy small{font-size:10px;letter-spacing:.18px}
+.main{max-width:none!important}
+.page-head{align-items:center}
+.page-head h1{letter-spacing:-.6px}
+.card,.product,.btn,.icon-btn,.settings-nav button,.drawer-link{transition:background-color .16s ease,border-color .16s ease,box-shadow .18s ease,transform .16s ease,color .16s ease}
+.product:active{transform:scale(.985)}
+.drawer-link:active,.btn:active,.icon-btn:active{transform:translateY(1px)}
+.navigation-backdrop{touch-action:pan-y}
+.navigation-drawer{padding-top:max(18px,env(safe-area-inset-top));padding-bottom:calc(18px + env(safe-area-inset-bottom))}
+.drawer-link{min-height:46px}
+.page-head,.card,.kpi,.settings-section,.table-card,.product-management-row,.staff-row{user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+body,body *{-webkit-user-select:none;-webkit-touch-callout:none}
+input,textarea,select,[contenteditable="true"],[role="textbox"],.selectable-text{-webkit-user-select:text!important;user-select:text!important;-webkit-touch-callout:default!important}
+@media(max-width:950px){.topbar{height:62px}.brand-copy strong{font-size:18px}.main{max-width:none!important}}
+@media(max-width:690px){.topbar{height:56px}.brand-copy strong{font-size:16px}.brand-copy small{font-size:8px}.brand{gap:8px}.page-head{gap:10px}.head-actions .btn{min-height:40px}}
+
 </style>
 </head>
 <body>
@@ -987,7 +1014,7 @@ const navItems=[['Sell','cash-register','POS'],['Orders','clipboard-list','POS']
 function navigate(page){if(!isAllowed(page)||(page==='Table Management'&&state.settings.tableManagementEnabled===false)){toast('This screen is restricted or disabled in settings.',false);return}closeNavigation();state.page=page;persist();render()}
 function roleLabel(){return state.role||'Sign in'}
 function render(){const root=document.getElementById('root');if(!state.role){root.innerHTML=loginView();bindLogin();return}if(!isAllowed(state.page)){state.page=state.role==='Kitchen'?'Kitchen':'Sell'}root.innerHTML=`<div class="app">${header()}${navigationDrawer()}<div class="layout"><main class="main">${pageContent()}</main></div></div>`;bindApp();persist()}
-function header(){return `<header class="topbar"><button type="button" class="brand brand-menu-trigger" data-action="toggle-navigation" aria-label="Open navigation menu" aria-expanded="false" title="Open navigation"><div class="brandmark">${icon('store')}</div><div><strong>MY POS</strong><small>Simple. Fast. Reliable.</small></div></button><div class="topline"></div><div class="top-label">Modern · Simple · Reliable</div><div class="header-spacer"></div><div class="cloud-status" title="Only user actions emit sync events. Cross-device cloud sync needs an authenticated backend.">${icon('circle')} Action-based sync · cloud not connected</div><button class="profile-pill" data-action="profile-menu"><span class="avatar">${escapeHtml((state.user?.name||state.role||'U').slice(0,1).toUpperCase())}</span><span class="profile-name">${escapeHtml(state.user?.name||state.role)} <small style="display:block;color:#d5eee0;font-size:10px">${escapeHtml(state.role)}</small></span>${icon('chevron-down')}</button></header>`}
+function header(){return `<header class="topbar"><div class="brand"><button type="button" class="brandmark brandmark-menu-trigger" data-action="toggle-navigation" aria-label="Open navigation menu" aria-expanded="false" title="Open navigation">${icon('store')}</button><div class="brand-copy"><strong>MY POS</strong><small>Simple. Fast. Reliable.</small></div></div><div class="topline"></div><div class="top-label">Modern · Simple · Reliable</div><div class="header-spacer"></div><div class="cloud-status" title="Only user actions emit sync events. Cross-device cloud sync needs an authenticated backend.">${icon('circle')} Action-based sync · cloud not connected</div><button class="profile-pill" data-action="profile-menu"><span class="avatar">${escapeHtml((state.user?.name||state.role||'U').slice(0,1).toUpperCase())}</span><span class="profile-name">${escapeHtml(state.user?.name||state.role)} <small style="display:block;color:#d5eee0;font-size:10px">${escapeHtml(state.role)}</small></span>${icon('chevron-down')}</button></header>`}
 function navigationDrawer(){
  const groups=[['POS','Point of sale'],['WORK','Kitchen operations'],['MANAGE','Business tools'],['ADMIN','Administration']];
  let html='<div class="navigation-backdrop" id="navigation-backdrop" data-action="close-navigation" aria-hidden="true"></div><aside class="navigation-drawer" id="navigation-drawer" aria-label="Main navigation" aria-hidden="true">';
@@ -1009,7 +1036,7 @@ function navigationDrawer(){
 }
 function navigationIsOpen(){return !!document.getElementById('navigation-drawer')?.classList.contains('open')}
 function toggleNavigation(){
- const drawer=document.getElementById('navigation-drawer'),backdrop=document.getElementById('navigation-backdrop'),button=document.querySelector('.brand-menu-trigger');
+ const drawer=document.getElementById('navigation-drawer'),backdrop=document.getElementById('navigation-backdrop'),button=document.querySelector('.brandmark-menu-trigger');
  if(!drawer||!backdrop)return;
  const open=!drawer.classList.contains('open');
  drawer.classList.toggle('open',open);backdrop.classList.toggle('open',open);
@@ -1018,7 +1045,7 @@ function toggleNavigation(){
  document.body.style.overflow=open?'hidden':'';
 }
 function closeNavigation(){
- const drawer=document.getElementById('navigation-drawer'),backdrop=document.getElementById('navigation-backdrop'),button=document.querySelector('.brand-menu-trigger');
+ const drawer=document.getElementById('navigation-drawer'),backdrop=document.getElementById('navigation-backdrop'),button=document.querySelector('.brandmark-menu-trigger');
  drawer?.classList.remove('open');backdrop?.classList.remove('open');
  drawer?.setAttribute('aria-hidden','true');backdrop?.setAttribute('aria-hidden','true');
  if(button){button.setAttribute('aria-expanded','false');button.setAttribute('aria-label','Open navigation menu');button.setAttribute('title','Open navigation')}
@@ -1156,7 +1183,7 @@ settingsContent=function(){if(state.role!=='Manager')return staffSettings();retu
 function orderDisplayIdentifier(o){return o&&o.type==='Dine-in'&&o.table&&o.table!=='Dine-in'?String(o.table):`Order #${o?.id??''}`}
 function shortTableLabel(o){return o&&o.type==='Dine-in'&&o.table?String(o.table):`Order #${o?.id??''}`}
 
-header=function(){return `<header class="topbar"><button type="button" class="brand brand-menu-trigger" data-action="toggle-navigation" aria-label="Open navigation menu" aria-expanded="false" title="Open navigation"><div class="brandmark">${icon('store')}</div><div><strong>MY POS</strong><small>Simple. Fast. Reliable.</small></div></button><div class="topline"></div><div class="top-label">Modern · Simple · Reliable</div><div class="header-spacer"></div><div class="cloud-status" title="Action-triggered sync; a real cloud backend is still required for separate devices.">${icon('circle')} Action-based sync</div><button class="profile-pill" data-action="profile-menu"><span class="avatar">${escapeHtml(String(state.role||'S').slice(0,1).toUpperCase())}</span><span class="profile-name">${escapeHtml(state.role||'Staff')} <small style="display:block;color:#d5eee0;font-size:10px">Staff assignment</small></span>${icon('chevron-down')}</button></header>`}
+header=function(){return `<header class="topbar"><div class="brand"><button type="button" class="brandmark brandmark-menu-trigger" data-action="toggle-navigation" aria-label="Open navigation menu" aria-expanded="false" title="Open navigation">${icon('store')}</button><div class="brand-copy"><strong>MY POS</strong><small>Simple. Fast. Reliable.</small></div></div><div class="topline"></div><div class="top-label">Modern · Simple · Reliable</div><div class="header-spacer"></div><div class="cloud-status" title="Action-triggered sync; a real cloud backend is still required for separate devices.">${icon('circle')} Action-based sync</div><button class="profile-pill" data-action="profile-menu"><span class="avatar">${escapeHtml(String(state.role||'S').slice(0,1).toUpperCase())}</span><span class="profile-name">${escapeHtml(state.role||'Staff')} <small style="display:block;color:#d5eee0;font-size:10px">Staff assignment</small></span>${icon('chevron-down')}</button></header>`}
 
 productCard=function(p){
   const showPhoto=state.settings.showProductPhotos!==false&&p.showPhoto!==false;
@@ -1371,6 +1398,27 @@ render();
 <script id="mypos-cloud-profile">document.addEventListener('click',e=>{const el=e.target.closest('[data-action="profile-menu"]');if(!el||!window.MYPOS_CLOUD?.active)return;e.preventDefault();e.stopImmediatePropagation();const c=window.MYPOS_CLOUD;showModal('Store access',`<div class="role-banner"><span class="avatar">${icon(c.role==='Kitchen'?'utensils':c.role==='Cashier'?'cash-register':'user-gear')}</span><div><strong>${escapeHtml(c.role)} assignment</strong><small>${escapeHtml(c.storeName||'MY POS store')}</small></div></div><p class="muted small">Access is set by the store Manager and verified on the cloud backend. Local role switching is disabled for authenticated accounts.</p>`,`<button class="btn btn-danger" data-action="cloud-signout">${icon('arrow-right-from-bracket')} Sign out</button>`,true)},true);
 </script>
 <script id="mypos-cloud-delegates">document.addEventListener('click',async e=>{const el=e.target.closest('[data-action]');if(!el)return;const a=el.dataset.action;try{if(a==='cloud-google-signin'){e.preventDefault();await window.MYPOS_CLOUD?.signInWithGoogle()}else if(a==='cloud-create-store'){e.preventDefault();await window.MYPOS_CLOUD?.createStore()}else if(a==='cloud-signout'){e.preventDefault();await window.MYPOS_CLOUD?.signOut()}else if(a==='invite-google-staff'){e.preventDefault();showModal('Assign staff account',`<p class="muted small">Invite a Google account by email. The person must sign in with that exact email.</p><div class="field"><label>Google account email</label><input id="cloud-invite-email" type="email" placeholder="staff@example.com" /></div><div class="field"><label>Role assignment</label><select id="cloud-invite-role"><option>Cashier</option><option>Kitchen</option><option>Manager</option></select></div>`,`<button class="btn" data-action="close-modal">Cancel</button><button class="btn btn-primary" data-action="send-cloud-invite">Send invitation</button>`,true)}else if(a==='send-cloud-invite'){e.preventDefault();const email=document.getElementById('cloud-invite-email')?.value.trim();const role=document.getElementById('cloud-invite-role')?.value;if(!email||!email.includes('@'))throw new Error('Enter a valid email address.');await window.MYPOS_CLOUD.inviteStaff(email,role);closeModal();render();toast('Staff assignment saved. They can accept it by signing in with Google.')}else if(a==='refresh-cloud-team'){e.preventDefault();await window.MYPOS_CLOUD.refreshTeam();render();toast('Staff assignments refreshed')}else if(a==='logout'&&window.MYPOS_CLOUD?.active){e.preventDefault();closeModal();await window.MYPOS_CLOUD.signOut()}}catch(err){toast(err.message||'Cloud action failed.',false)}});</script>
+
+<script>
+/* Prevent native text-selection/copy overlays for non-editable POS interface text.
+   Inputs and editable controls retain normal selection and editing behavior. */
+(function installPosTouchTextPolicy(){
+ const editableSelector='input, textarea, select, [contenteditable="true"], [role="textbox"], .selectable-text';
+ document.addEventListener('contextmenu',function(event){
+  const target=event.target;
+  if(!(target instanceof Element))return;
+  if(target.closest(editableSelector))return;
+  if(target.closest('#root, #modal-root'))event.preventDefault();
+ },true);
+ document.addEventListener('selectstart',function(event){
+  const target=event.target;
+  if(!(target instanceof Element))return;
+  if(target.closest(editableSelector))return;
+  if(target.closest('#root, #modal-root'))event.preventDefault();
+ },true);
+})();
+</script>
+
 </body>
 </html>
 
