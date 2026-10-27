@@ -1062,7 +1062,8 @@ function cartItem(item,i){const p=state.products.find(x=>x.id===item.id)||item;r
 // Product prices are VAT-inclusive. Extract the VAT portion for reporting only; never add it to the amount due.
 function cartTotal(){
  const itemsTotal=state.currentOrder.reduce((sum,item)=>sum+(Number(item.price)||0)*(Number(item.qty)||0),0);
- const vatIncluded=itemsTotal*12/112;
+ // Round the VAT portion to currency cents. The listed total is already VAT-inclusive.
+ const vatIncluded=Math.round((itemsTotal*12/112+Number.EPSILON)*100)/100;
  return {subtotal:itemsTotal,tax:vatIncluded,total:itemsTotal};
 }
 function cartQuantity(){return state.currentOrder.reduce((s,x)=>s+x.qty,0)}
