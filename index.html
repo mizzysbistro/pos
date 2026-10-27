@@ -117,7 +117,8 @@ const PRODUCTS = [
     "stock": 10,
     "lowStock": 3,
     "trackStock": true,
-    "modifiers": [],    "imageIndex": 4
+    "modifiers": [],
+    "imageIndex": 4
   },
   {
     "id": "adb1",
@@ -236,7 +237,8 @@ const PRODUCTS = [
     "sku": "HCF2",
     "name": "Cafe Latte",
     "category": "Coffee",
-    "price": 140.0,    "stock": 10,
+    "price": 140.0,
+    "stock": 10,
     "lowStock": 3,
     "trackStock": true,
     "modifiers": [
@@ -355,7 +357,8 @@ const PRODUCTS = [
     "trackStock": true,
     "modifiers": [
       "Egg"
-    ],    "imageIndex": 11
+    ],
+    "imageIndex": 11
   },
   {
     "id": "ap3",
@@ -474,7 +477,8 @@ const PRODUCTS = [
     "trackStock": true,
     "modifiers": [
       "French Fries",
-      "French Fries Dip"    ],
+      "French Fries Dip"
+    ],
     "imageIndex": 8
   },
   {
@@ -593,7 +597,8 @@ const PRODUCTS = [
     "id": "adb6",
     "sku": "ADB6",
     "name": "Longanisa (Garlic)",
-    "category": "All-Day Breakfast",    "price": 300.0,
+    "category": "All-Day Breakfast",
+    "price": 300.0,
     "stock": 10,
     "lowStock": 3,
     "trackStock": true,
@@ -712,7 +717,8 @@ const PRODUCTS = [
     "category": "Extras",
     "price": 40.0,
     "stock": 10,
-    "lowStock": 3,    "trackStock": true,
+    "lowStock": 3,
+    "trackStock": true,
     "modifiers": [],
     "imageIndex": 3
   },
@@ -831,7 +837,8 @@ const PRODUCTS = [
     "trackStock": true,
     "modifiers": [],
     "imageIndex": 0
-  }];
+  }
+];
 const FOOD_IMAGES = [
 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=560&q=80',
 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=560&q=80',
@@ -950,7 +957,8 @@ function formatDate(v){if(!v)return '—';try{return new Date(v).toLocaleDateStr
 
 function requestOrderCommit(mode){if(!state.currentOrder.length)return;if(state.orderType==='Dine-in'){dineInDetailsDialog(mode);return}if(mode==='charge')chargeCurrent();else saveCurrentOrder()}
 function dineInDetailsDialog(mode){const useTableManager=state.settings.tableManagementEnabled!==false;const candidates=state.tables||[];const selected=candidates.some(t=>t.name===state.table)?state.table:'';const tableField=useTableManager?`<div class="field"><label>Table number <span style="color:var(--red)">*</span></label><select id="dinein-table"><option value="">Select a table</option>${candidates.map(t=>`<option value="${escapeHtml(t.name)}" ${selected===t.name?'selected':''} ${['Reserved','Cleaning'].includes(t.manualStatus)?'disabled':''}>${escapeHtml(t.name)} · ${escapeHtml(t.section||'Main Dining')}${t.manualStatus&&t.manualStatus!=='Available'?` · ${escapeHtml(t.manualStatus)}`:''}</option>`).join('')}</select><small class="muted">Reserved or cleaning tables cannot start a new order.</small></div>`:`<div class="field"><label>Table number <span style="color:var(--red)">*</span></label><input id="dinein-table" value="${escapeHtml(state.table||'')}" placeholder="e.g. Table 3" /></div>`;showModal('Dine-in details',`<div class="role-banner"><i class="fa-solid fa-utensils"></i><div><strong>Dine-in order</strong><small>Assign a table and enter the number of customers before continuing.</small></div></div>${tableField}<div class="field"><label>Customers at the table ${state.settings.requireGuestCount!==false?'<span style="color:var(--red)">*</span>':'<span class="muted">(optional)</span>'}</label><input id="dinein-guests" type="number" min="1" max="100" step="1" value="${Math.max(1,Number(state.tableGuestCount||2))}" /></div><div class="sync-banner"><i class="fa-solid fa-circle-info"></i><div>Saving commits the ticket to kitchen and records its stock movement. Payment remains separate.</div></div>`,`<button class="btn" data-action="close-modal">Cancel</button><button class="btn btn-primary" data-action="confirm-dinein-commit" data-mode="${mode}">${icon(mode==='charge'?'wallet':'floppy-disk')} ${mode==='charge'?'Continue to Charge':'Save Order'}</button>`)}
-function confirmDineInCommit(mode){const field=document.getElementById('dinein-table');const tableName=(field?.value||'').trim();const guests=Number(document.getElementById('dinein-guests')?.value||0);if(!tableName){toast('Choose or enter a table number.',false);return}if((state.settings.requireGuestCount!==false||guests>0)&&(!Number.isInteger(guests)||guests<1||guests>100)){toast('Enter a valid customer count from 1 to 100.',false);return}if(state.settings.tableManagementEnabled!==false){const t=state.tables.find(t=>t.name===tableName);if(!t){toast('That table is not in Table Management.',false);return}if(['Reserved','Cleaning'].includes(t.manualStatus)){toast(`${t.name} is marked ${t.manualStatus.toLowerCase()} and cannot receive a new order.`,false);return}const open=state.orders.find(o=>o.type==='Dine-in'&&o.table===tableName&&o.status!=='Cancelled'&&o.status!=='Completed'&&o.kitchen!=='Completed');if(open&&state.settings.allowMultipleOrdersPerTable===false){toast(`${tableName} already has an active order. Choose another table.`,false);return}}state.table=tableName;state.tableGuestCount=guests||0;closeModal();if(mode==='charge')chargeCurrent();else saveCurrentOrder()}function activeOrdersForTable(tableName){return state.orders.filter(o=>o.type==='Dine-in'&&o.table===tableName&&o.status!=='Cancelled'&&o.status!=='Completed'&&o.kitchen!=='Completed')}
+function confirmDineInCommit(mode){const field=document.getElementById('dinein-table');const tableName=(field?.value||'').trim();const guests=Number(document.getElementById('dinein-guests')?.value||0);if(!tableName){toast('Choose or enter a table number.',false);return}if((state.settings.requireGuestCount!==false||guests>0)&&(!Number.isInteger(guests)||guests<1||guests>100)){toast('Enter a valid customer count from 1 to 100.',false);return}if(state.settings.tableManagementEnabled!==false){const t=state.tables.find(t=>t.name===tableName);if(!t){toast('That table is not in Table Management.',false);return}if(['Reserved','Cleaning'].includes(t.manualStatus)){toast(`${t.name} is marked ${t.manualStatus.toLowerCase()} and cannot receive a new order.`,false);return}const open=state.orders.find(o=>o.type==='Dine-in'&&o.table===tableName&&o.status!=='Cancelled'&&o.status!=='Completed'&&o.kitchen!=='Completed');if(open&&state.settings.allowMultipleOrdersPerTable===false){toast(`${tableName} already has an active order. Choose another table.`,false);return}}state.table=tableName;state.tableGuestCount=guests||0;closeModal();if(mode==='charge')chargeCurrent();else saveCurrentOrder()}
+function activeOrdersForTable(tableName){return state.orders.filter(o=>o.type==='Dine-in'&&o.table===tableName&&o.status!=='Cancelled'&&o.status!=='Completed'&&o.kitchen!=='Completed')}
 function tableDisplayStatus(t){const active=activeOrdersForTable(t.name);if(active.length)return 'Occupied';return t.manualStatus||'Available'}
 function tableManagementPage(){if(state.settings.tableManagementEnabled===false)return head('Table Management','Table management is disabled in Settings.','<button class="btn" data-action="open-table-settings">Open settings</button>');const tables=state.tables||[];const occupied=tables.filter(t=>tableDisplayStatus(t)==='Occupied').length;const available=tables.filter(t=>tableDisplayStatus(t)==='Available').length;const reserved=tables.filter(t=>tableDisplayStatus(t)==='Reserved').length;return `${head('Table Management','View table occupancy, start dine-in orders, and track guest counts.',`<button class="btn" data-action="add-table">${icon('plus')} Add table</button><button class="btn btn-primary" data-action="begin-dinein-order">${icon('cash-register')} New dine-in order</button>`)}<div class="kpi-grid" style="grid-template-columns:repeat(3,minmax(0,1fr))"><div class="card kpi"><div class="kpi-top">Available <span class="kpi-icon">${icon('check')}</span></div><div class="kpi-value">${available}</div><div class="kpi-foot">Ready for guests</div></div><div class="card kpi"><div class="kpi-top">Occupied <span class="kpi-icon">${icon('users')}</span></div><div class="kpi-value">${occupied}</div><div class="kpi-foot">Active dine-in tickets</div></div><div class="card kpi"><div class="kpi-top">Reserved / cleaning <span class="kpi-icon">${icon('calendar-check')}</span></div><div class="kpi-value">${reserved+tables.filter(t=>tableDisplayStatus(t)==='Cleaning').length}</div><div class="kpi-foot">Unavailable tables</div></div></div><div class="table-grid">${tables.map(t=>{const active=activeOrdersForTable(t.name);const status=tableDisplayStatus(t);const cls=status==='Occupied'?'occupied':status==='Available'?'available':status==='Reserved'?'reserved':'cleaning';const guests=active.reduce((max,o)=>Math.max(max,Number(o.tableGuestCount||0)),0);const total=active.reduce((sum,o)=>sum+Number(o.total||0),0);return `<article class="table-card ${cls}"><div class="table-card-head"><div class="table-icon">${icon('utensils')}</div><span class="pill ${status==='Available'?'pill-green':status==='Occupied'?'pill-amber':'pill-gray'}">${status}</span></div><h3>${escapeHtml(t.name)}</h3><div class="table-meta">${escapeHtml(t.section||'Main Dining')} · Capacity ${Number(t.capacity||4)}</div><div class="table-card-stats"><div><span>Guests</span><strong>${guests||'—'}</strong></div><div><span>Open orders</span><strong>${active.length}</strong></div><div><span>Order total</span><strong>${money(total)}</strong></div></div><div class="table-card-actions">${active.length?`<button class="btn btn-primary btn-sm" data-action="view-order" data-id="${active[0].id}">View order</button>`:`<button class="btn btn-primary btn-sm" data-action="start-table-order" data-id="${t.id}" ${['Reserved','Cleaning'].includes(status)?'disabled':''}>Start order</button>`}<button class="btn btn-sm" data-action="table-status" data-id="${t.id}">Status</button></div></article>`}).join('')}</div><div class="sync-banner" style="margin-top:16px"><i class="fa-solid fa-bolt"></i><div>Table and order changes are saved locally and emit action-based sync events. Live cross-device syncing still requires the cloud adapter.</div></div>`}
 function tableStatusDialog(id){const t=state.tables.find(t=>t.id===Number(id));if(!t)return;showModal('Table status',`<div class="role-banner"><i class="fa-solid fa-table-cells"></i><div><strong>${escapeHtml(t.name)}</strong><small>Active orders automatically mark a table occupied.</small></div></div><div class="field"><label>Table name / number</label><input id="table-name" value="${escapeHtml(t.name)}" /></div><div class="field"><label>Manual status</label><select id="table-manual-status">${['Available','Reserved','Cleaning'].map(x=>`<option ${t.manualStatus===x?'selected':''}>${x}</option>`).join('')}</select></div><div class="field"><label>Section</label><input id="table-section" value="${escapeHtml(t.section||'Main Dining')}" /></div><div class="field"><label>Capacity</label><input id="table-capacity" type="number" min="1" max="100" value="${Number(t.capacity||4)}" /></div>`,`<button class="btn" data-action="close-modal">Cancel</button><button class="btn btn-primary" data-action="save-table-status" data-id="${t.id}">Save table</button>`)}
@@ -1069,7 +1077,8 @@ sellPage=function(){
  const tableTag=state.orderType==='Dine-in'&&state.table?`<span class="table-tag">${escapeHtml(state.table)}${state.tableGuestCount?` · ${Number(state.tableGuestCount)} guests`:''}</span>`:'';
  return `${head('Sell','Tap a product to add it. Save to send the ticket to kitchen; Charge to take payment.',`<button class="btn" data-action="new-order">${icon('rotate-left')} New order</button><button class="btn btn-primary" data-action="customer-note">${icon('table-cells')} ${state.orderType==='Dine-in'?'Table':'Order type'}</button>`)}
  <div class="sell-layout"><section><div class="catalog-toolbar"><label class="searchbox">${icon('magnifying-glass')}<input id="product-search" placeholder="Search products…" value="${escapeHtml(state.search)}" /></label><button class="icon-btn" title="Find by barcode" data-action="barcode">${icon('barcode')}</button></div>
- <div class="categories">${categories.map(c=>`<button class="cat-chip ${c===state.activeCategory?'active':''}" data-category="${escapeHtml(c)}">${escapeHtml(c)}</button>`).join('')}</div> <div class="product-grid">${products.map(p=>productCard(p)).join('')||`<div class="empty-state">${icon('magnifying-glass')}<div>No products match</div></div>`}</div></section>
+ <div class="categories">${categories.map(c=>`<button class="cat-chip ${c===state.activeCategory?'active':''}" data-category="${escapeHtml(c)}">${escapeHtml(c)}</button>`).join('')}</div>
+ <div class="product-grid">${products.map(p=>productCard(p)).join('')||`<div class="empty-state">${icon('magnifying-glass')}<div>No products match</div></div>`}</div></section>
  <aside class="card cart-panel"><div class="cart-top"><div><h2>Current Order</h2><div class="cart-meta">${state.currentOrder.length?`${cartQuantity()} items · ${escapeHtml(state.orderType)}`:'No items added yet'}</div></div><div style="display:flex;align-items:center;gap:8px">${tableTag}<span class="pill ${state.currentOrder.length?'pill-amber':'pill-gray'}">${state.currentOrder.length?'Draft':'Empty'}</span></div></div>
  <div class="cart-items">${state.currentOrder.length?state.currentOrder.map((item,i)=>cartItem(item,i)).join(''):`<div class="empty-orders"><div style="width:64px;height:64px;border-radius:18px;background:#f1f8f4;color:#78a88d;display:grid;place-items:center;font-size:24px;margin:12px auto">${icon('basket-shopping')}</div><strong style="color:#40564a">Your order starts here</strong><div class="small" style="margin-top:5px">Tap a product to add it.</div></div>`}</div>
  ${state.currentOrder.length&&state.settings.swipeRemove!==false?'<div class="swipe-hint">Swipe an item left to remove it</div>':''}<textarea class="cart-note" id="order-note" rows="2" placeholder="Kitchen note (optional)…">${escapeHtml(state.orderNote)}</textarea>
@@ -1188,7 +1197,8 @@ saveOwnPin=function(){const oldPin=document.getElementById('own-old-pin')?.value
 
 
 // Cloud integration hooks: these expose only safe app-level methods to the module adapter.
-window.MYPOS_STATE = state;Object.defineProperty(window, 'MYPOS_STATE', { configurable: true, get: () => state, set: v => { state = v; } });
+window.MYPOS_STATE = state;
+Object.defineProperty(window, 'MYPOS_STATE', { configurable: true, get: () => state, set: v => { state = v; } });
 window.MYPOS_RENDER = render;
 window.MYPOS_PERSIST = persist;
 window.MYPOS_TOAST = toast;
@@ -1257,4 +1267,5 @@ render();
 <script id="mypos-cloud-delegates">document.addEventListener('click',async e=>{const el=e.target.closest('[data-action]');if(!el)return;const a=el.dataset.action;try{if(a==='cloud-google-signin'){e.preventDefault();await window.MYPOS_CLOUD?.signInWithGoogle()}else if(a==='cloud-create-store'){e.preventDefault();await window.MYPOS_CLOUD?.createStore()}else if(a==='cloud-signout'){e.preventDefault();await window.MYPOS_CLOUD?.signOut()}else if(a==='invite-google-staff'){e.preventDefault();showModal('Assign staff account',`<p class="muted small">Invite a Google account by email. The person must sign in with that exact email.</p><div class="field"><label>Google account email</label><input id="cloud-invite-email" type="email" placeholder="staff@example.com" /></div><div class="field"><label>Role assignment</label><select id="cloud-invite-role"><option>Cashier</option><option>Kitchen</option><option>Manager</option></select></div>`,`<button class="btn" data-action="close-modal">Cancel</button><button class="btn btn-primary" data-action="send-cloud-invite">Send invitation</button>`,true)}else if(a==='send-cloud-invite'){e.preventDefault();const email=document.getElementById('cloud-invite-email')?.value.trim();const role=document.getElementById('cloud-invite-role')?.value;if(!email||!email.includes('@'))throw new Error('Enter a valid email address.');await window.MYPOS_CLOUD.inviteStaff(email,role);closeModal();render();toast('Staff assignment saved. They can accept it by signing in with Google.')}else if(a==='refresh-cloud-team'){e.preventDefault();await window.MYPOS_CLOUD.refreshTeam();render();toast('Staff assignments refreshed')}else if(a==='logout'&&window.MYPOS_CLOUD?.active){e.preventDefault();closeModal();await window.MYPOS_CLOUD.signOut()}}catch(err){toast(err.message||'Cloud action failed.',false)}});</script>
 </body>
 </html>
+
 
