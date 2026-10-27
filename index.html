@@ -59,11 +59,11 @@
 .main{display:block;width:100%;max-width:none!important;min-width:0;margin:0;padding:clamp(12px,1.8vw,28px)!important}
 .topbar{gap:clamp(8px,1.3vw,18px);padding:0 clamp(10px,1.6vw,24px)}
 .brand{min-width:0;gap:9px}
+.brand-menu-trigger{flex:none;appearance:none;-webkit-appearance:none;border:0;background:transparent;color:inherit;padding:0;text-align:left;cursor:pointer;border-radius:12px;outline-offset:5px}
+.brand-menu-trigger:hover{opacity:.94}
+.brand-menu-trigger:active{transform:scale(.99)}
 .topline,.top-label,.cloud-status{display:none!important}
 .header-spacer{flex:1;min-width:8px}
-.nav-menu-btn{width:auto;min-width:46px;height:42px;flex:0 0 auto;padding:0 12px;border:1px solid #ffffff55;background:#ffffff1c;color:#fff;border-radius:12px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:17px;font-weight:800;box-shadow:0 2px 8px #003b2540;transition:background .15s,transform .15s}.menu-button-label{font-size:12px;line-height:1}
-.nav-menu-btn:hover{background:#ffffff25}
-.nav-menu-btn:active{transform:scale(.96)}
 .navigation-backdrop{position:fixed;inset:0;background:rgba(3,26,16,.56);backdrop-filter:blur(2px);z-index:70;opacity:0;visibility:hidden;transition:opacity .2s,visibility .2s}
 .navigation-backdrop.open{opacity:1;visibility:visible}
 .navigation-drawer{position:fixed;inset:0 auto 0 0;z-index:71;width:min(340px,88vw);padding:18px 15px calc(18px + env(safe-area-inset-bottom));background:#fbfdfb;border-right:1px solid #dce9e0;box-shadow:16px 0 50px #001d1030;transform:translateX(-105%);transition:transform .22s cubic-bezier(.2,.75,.2,1);display:flex;flex-direction:column;gap:17px;overflow:auto;overscroll-behavior:contain}
@@ -89,8 +89,8 @@
 .drawer-shift strong{display:block;font-size:12px}
 .drawer-shift small{display:block;color:var(--muted);font-size:10px;margin-top:4px}
 .drawer-bottom .btn{width:100%}
-@media(max-width:950px){.sidebar,.mobile-bottom{display:none!important}.layout{display:block!important}.main{padding:clamp(12px,2.2vw,20px)!important}.topbar{height:62px;padding:0 12px;gap:10px}.brandmark{width:35px;height:35px;font-size:17px}.brand strong{font-size:18px}.brand small{font-size:9px}.nav-menu-btn{min-width:39px;height:39px;padding:0 10px;flex-basis:auto}}
-@media(max-width:690px){.topbar{height:56px;padding:0 9px;gap:8px}.brandmark{display:none}.brand strong{font-size:17px}.brand small{font-size:8px}.nav-menu-btn{height:37px;min-width:37px;padding:0 9px;gap:7px;flex-basis:auto}.menu-button-label{display:inline;font-size:11px}.main{padding:12px 9px 18px!important}.profile-pill{margin-left:auto}}
+@media(max-width:950px){.sidebar,.mobile-bottom{display:none!important}.layout{display:block!important}.main{padding:clamp(12px,2.2vw,20px)!important}.topbar{height:62px;padding:0 12px;gap:10px}.brandmark{width:35px;height:35px;font-size:17px}.brand strong{font-size:18px}.brand small{font-size:9px}}
+@media(max-width:690px){.topbar{height:56px;padding:0 9px;gap:8px}.brandmark{display:none}.brand strong{font-size:17px}.brand small{font-size:8px}.brand-menu-trigger{gap:0}.main{padding:12px 9px 18px!important}.profile-pill{margin-left:auto}}
 </style>
 </head>
 <body>
@@ -987,7 +987,7 @@ const navItems=[['Sell','cash-register','POS'],['Orders','clipboard-list','POS']
 function navigate(page){if(!isAllowed(page)||(page==='Table Management'&&state.settings.tableManagementEnabled===false)){toast('This screen is restricted or disabled in settings.',false);return}closeNavigation();state.page=page;persist();render()}
 function roleLabel(){return state.role||'Sign in'}
 function render(){const root=document.getElementById('root');if(!state.role){root.innerHTML=loginView();bindLogin();return}if(!isAllowed(state.page)){state.page=state.role==='Kitchen'?'Kitchen':'Sell'}root.innerHTML=`<div class="app">${header()}${navigationDrawer()}<div class="layout"><main class="main">${pageContent()}</main></div></div>`;bindApp();persist()}
-function header(){return `<header class="topbar"><button class="nav-menu-btn" type="button" data-action="toggle-navigation" aria-label="Open navigation menu" aria-expanded="false" title="Open menu">${icon('bars')}</button><div class="brand"><div class="brandmark">${icon('store')}</div><div><strong>MY POS</strong><small>Simple. Fast. Reliable.</small></div></div><div class="topline"></div><div class="top-label">Modern · Simple · Reliable</div><div class="header-spacer"></div><div class="cloud-status" title="Only user actions emit sync events. Cross-device cloud sync needs an authenticated backend.">${icon('circle')} Action-based sync · cloud not connected</div><button class="profile-pill" data-action="profile-menu"><span class="avatar">${escapeHtml((state.user?.name||state.role||'U').slice(0,1).toUpperCase())}</span><span class="profile-name">${escapeHtml(state.user?.name||state.role)} <small style="display:block;color:#d5eee0;font-size:10px">${escapeHtml(state.role)}</small></span>${icon('chevron-down')}</button></header>`}
+function header(){return `<header class="topbar"><button type="button" class="brand brand-menu-trigger" data-action="toggle-navigation" aria-label="Open navigation menu" aria-expanded="false" title="Open navigation"><div class="brandmark">${icon('store')}</div><div><strong>MY POS</strong><small>Simple. Fast. Reliable.</small></div></button><div class="topline"></div><div class="top-label">Modern · Simple · Reliable</div><div class="header-spacer"></div><div class="cloud-status" title="Only user actions emit sync events. Cross-device cloud sync needs an authenticated backend.">${icon('circle')} Action-based sync · cloud not connected</div><button class="profile-pill" data-action="profile-menu"><span class="avatar">${escapeHtml((state.user?.name||state.role||'U').slice(0,1).toUpperCase())}</span><span class="profile-name">${escapeHtml(state.user?.name||state.role)} <small style="display:block;color:#d5eee0;font-size:10px">${escapeHtml(state.role)}</small></span>${icon('chevron-down')}</button></header>`}
 function navigationDrawer(){
  const groups=[['POS','Point of sale'],['WORK','Kitchen operations'],['MANAGE','Business tools'],['ADMIN','Administration']];
  let html='<div class="navigation-backdrop" id="navigation-backdrop" data-action="close-navigation" aria-hidden="true"></div><aside class="navigation-drawer" id="navigation-drawer" aria-label="Main navigation" aria-hidden="true">';
@@ -1009,19 +1009,19 @@ function navigationDrawer(){
 }
 function navigationIsOpen(){return !!document.getElementById('navigation-drawer')?.classList.contains('open')}
 function toggleNavigation(){
- const drawer=document.getElementById('navigation-drawer'),backdrop=document.getElementById('navigation-backdrop'),button=document.querySelector('.nav-menu-btn');
+ const drawer=document.getElementById('navigation-drawer'),backdrop=document.getElementById('navigation-backdrop'),button=document.querySelector('.brand-menu-trigger');
  if(!drawer||!backdrop)return;
  const open=!drawer.classList.contains('open');
  drawer.classList.toggle('open',open);backdrop.classList.toggle('open',open);
  drawer.setAttribute('aria-hidden',String(!open));backdrop.setAttribute('aria-hidden',String(!open));
- if(button){button.setAttribute('aria-expanded',String(open));button.setAttribute('aria-label',open?'Close navigation menu':'Open navigation menu')}
+ if(button){button.setAttribute('aria-expanded',String(open));button.setAttribute('aria-label',open?'Close navigation menu':'Open navigation menu');button.setAttribute('title',open?'Close navigation':'Open navigation')}
  document.body.style.overflow=open?'hidden':'';
 }
 function closeNavigation(){
- const drawer=document.getElementById('navigation-drawer'),backdrop=document.getElementById('navigation-backdrop'),button=document.querySelector('.nav-menu-btn');
+ const drawer=document.getElementById('navigation-drawer'),backdrop=document.getElementById('navigation-backdrop'),button=document.querySelector('.brand-menu-trigger');
  drawer?.classList.remove('open');backdrop?.classList.remove('open');
  drawer?.setAttribute('aria-hidden','true');backdrop?.setAttribute('aria-hidden','true');
- if(button){button.setAttribute('aria-expanded','false');button.setAttribute('aria-label','Open navigation menu')}
+ if(button){button.setAttribute('aria-expanded','false');button.setAttribute('aria-label','Open navigation menu');button.setAttribute('title','Open navigation')}
  document.body.style.overflow='';
 }
 function sidebar(){let groups=['POS','WORK','MANAGE','ADMIN'];let html='<aside class="sidebar">';for(const group of groups){const items=navItems.filter(n=>n[2]===group&&isAllowed(n[0])&&(n[0]!=='Table Management'||state.settings.tableManagementEnabled!==false));if(!items.length)continue;html+=`<div><div class="nav-label">${group==='POS'?'Point of sale':group==='WORK'?'Kitchen operations':group==='MANAGE'?'Business tools':'Administration'}</div><div class="nav-group">`;for(const n of items){const count=n[0]==='Orders'?state.orders.filter(o=>o.payment!=='Paid').length:n[0]==='Kitchen'?state.orders.filter(o=>!['Served','Completed','Cancelled'].includes(o.kitchen)).length:0;html+=`<button class="nav-btn ${state.page===n[0]?'active':''}" data-nav="${n[0]}">${icon(n[1])}<span>${n[0]}</span>${count?`<span class="nav-count">${count}</span>`:''}</button>`}html+='</div></div>'}html+=`<div class="side-bottom"><div class="shift-mini"><div class="tiny"><span class="live-dot"></span>${state.shift.open?'Shift open':'Shift closed'}</div><strong>${state.shift.open?'#'+String(state.shift.id).padStart(3,'0'):'No active shift'}</strong><div class="tiny">${state.shift.open?'Started '+formatTime(state.shift.openedAt):'Open a shift before trading'}</div>${state.role==='Manager'||state.role==='Cashier'?`<button class="btn btn-sm btn-wide ${state.shift.open?'btn-quiet':'btn-primary'}" style="margin-top:10px" data-action="shift-quick">${state.shift.open?'View shift':'Open shift'}</button>`:''}</div><button class="nav-btn" style="margin-top:9px" data-action="logout">${icon('arrow-right-from-bracket')}<span>Lock / Sign out</span></button></div></aside>`;return html}
@@ -1156,7 +1156,7 @@ settingsContent=function(){if(state.role!=='Manager')return staffSettings();retu
 function orderDisplayIdentifier(o){return o&&o.type==='Dine-in'&&o.table&&o.table!=='Dine-in'?String(o.table):`Order #${o?.id??''}`}
 function shortTableLabel(o){return o&&o.type==='Dine-in'&&o.table?String(o.table):`Order #${o?.id??''}`}
 
-header=function(){return `<header class="topbar"><button class="nav-menu-btn" type="button" data-action="toggle-navigation" aria-label="Open navigation menu" aria-expanded="false" title="Open menu">${icon('bars')}<span class="menu-button-label">Menu</span></button><div class="brand"><div class="brandmark">${icon('store')}</div><div><strong>MY POS</strong><small>Simple. Fast. Reliable.</small></div></div><div class="topline"></div><div class="top-label">Modern · Simple · Reliable</div><div class="header-spacer"></div><div class="cloud-status" title="Action-triggered sync; a real cloud backend is still required for separate devices.">${icon('circle')} Action-based sync</div><button class="profile-pill" data-action="profile-menu"><span class="avatar">${escapeHtml(String(state.role||'S').slice(0,1).toUpperCase())}</span><span class="profile-name">${escapeHtml(state.role||'Staff')} <small style="display:block;color:#d5eee0;font-size:10px">Staff assignment</small></span>${icon('chevron-down')}</button></header>`}
+header=function(){return `<header class="topbar"><button type="button" class="brand brand-menu-trigger" data-action="toggle-navigation" aria-label="Open navigation menu" aria-expanded="false" title="Open navigation"><div class="brandmark">${icon('store')}</div><div><strong>MY POS</strong><small>Simple. Fast. Reliable.</small></div></button><div class="topline"></div><div class="top-label">Modern · Simple · Reliable</div><div class="header-spacer"></div><div class="cloud-status" title="Action-triggered sync; a real cloud backend is still required for separate devices.">${icon('circle')} Action-based sync</div><button class="profile-pill" data-action="profile-menu"><span class="avatar">${escapeHtml(String(state.role||'S').slice(0,1).toUpperCase())}</span><span class="profile-name">${escapeHtml(state.role||'Staff')} <small style="display:block;color:#d5eee0;font-size:10px">Staff assignment</small></span>${icon('chevron-down')}</button></header>`}
 
 productCard=function(p){
   const showPhoto=state.settings.showProductPhotos!==false&&p.showPhoto!==false;
